@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>checking user email</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<!-- CSS only -->
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
+	<!-- JavaScript Bundle with Popper -->
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8" crossorigin="anonymous"></script>
+  <style type="text/css">
+    .login-p {
+      font-size: 15px;
+      color:#454545;
+      font-weight: bold;
+    }
+    body {
+/*      background-color: #212121;
+*/    }
+    form {
+      /*background-color: #333333;*/
+      background-position: center center;
+      background-repeat: no-repeat;
+    }
+  </style>
+</head>
+<body>
+  <div class="container-fluid">
+  <div class="container-fluid mt-5" style="max-width: 500px;">
+    <h2 style="color: gray;text-align: center;">Enter the user name and we will send code the user email</h2>
+    <form class="shadow-lg rounded-5 p-4" action="addPswd" method="post" autocomplete="off">
+      {% csrf_token %}
+        <!-- <label for="pwd">Password:</label> -->
+        <input class="form-control" type="text" id="user_name" name="userName">
+      <button type="submit" class="btn btn-primary" id="sButton">Verify</button>
+    </form>
+    {% if error %}
+    <p class="text-danger">{{error}}</p>
+    {% endif %}
+  </div>
+  </div>
+  <script>
+  
+  </script>
+</body>
+</html>

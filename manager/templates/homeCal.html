@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Data Hunter</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  {% load static %}
+  <!-- CSS only -->
+  <link rel="icon" type="image/png" href="{% static 'images/1x.png' %}"/>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <!-- JavaScript Bundle with Popper -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8" crossorigin="anonymous"></script>
+  <link rel="stylesheet" type="text/css" href="{% static 'CSS/autocompleteStyle.css' %}">
+  <script
+  src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js">
+</script>
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<script src = "{% static 'JavaScripts/javascripts.js' %}"></script>
+</head>
+<body>
+  <!--nav-->
+  <nav class="navbar navbar-expand-lg bg-light fixed-top rounded-5 shadow" style="align-content:center;">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#" style="font-family: fantasy;">
+        {{storeName}} store</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNavDropdown">
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="graph{{'currentMonth'}}">ပုံပြဇယား</a>
+          </li>
+          {% comment %} <li class="nav-item">
+            <a class="nav-link" href="home">Calculator</a>
+          </li> {% endcomment %}
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'data' %}">ကုန်ပစ္စည်း</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="history">လုပ်ဆောင်ချက်များ</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="developerContact">contact me</a>
+          </li>
+          <li class="nav-item" style="color:yellow;">
+            <a class="nav-link text-danger" href="logout_user">အကောင့်မှထွက်ရန်</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  <!--nav end-->
+
+  <div class="container-fluid mx-auto border shadow rounded-5 p-4" style="margin-top:80px;max-width: 370px;height: 370px;overflow: auto;overflow-x: hidden;">
+    <div style="max-width:320px;align-content: center;position: fixed;z-index: 1;margin-right:auto;margin-left:auto;" class="border container-fluid">
+      <!--item input-->
+      <input id="myInput" name="myCountry" placeholder="ကုန်ပစ္စည်းအမည်" class="form-control" autocomplete="off" style="margin-left:0;margin-right: 0;max-width: 310px;">
+      <!--item input end-->
+
+      <div style="margin-top: 3px;margin-left: auto;margin-right: auto;max-width: 300px;" class="border container-fluid input-group">
+        <!--quantity input-->
+        <input type="number" id="quantity" name="quantity" min="0" max="9999999" style="margin-bottom: 10px;max-width: 128px;" placeholder="အရေအတွက်" class="form-control d-inline">
+        <!--quantity input end-->
+        <button class="btn btn-primary" id="liveAlertBtn" type="button" style="max-height:38px;">
+          စာရင်းထဲထည့်ရန်
+        </button>
+      </div>
+    </div>
+    <div style="z-index: 2;margin-top: 100px;" class="">
+      <div id="liveAlertPlaceholder"></div>
+    </div>
+  </div>
+  <form action="updateExData" method="post">
+    {% csrf_token %}
+  <div class="input-group mb-3 shadow-lg rounded-5 container-fluid" style="margin-top: 7px;margin-right: auto;margin-left: auto;max-width: 400px;">
+    <input type="text" name="item_name" style="display: none;" id="itemName">
+    <input type="text" name="quantity" style="display: none;" id="itemQuantity">
+    <input type="text" name="totalPrice" style="display:none;" id="totalPrice">
+    <button class="btn btn text-bg-primary rounded" type="submit" id="button-addon1">ရောင်းမည်</button>
+    <input type="text" name ="allTotal" class="form-control" placeholder="" aria-label="Example text with button addon" aria-describedby="button-addon1" disabled="on" id='total' value="0">
+    <button onclick="clearAll()" class="btn btn" type="button" id="button-addon2"><i class="fa fa-refresh" style="font-size: 24px;"></i></button>
+  </div>
+  </form>
+  <!--live alert-->
+  <script type="text/javascript">
+    var inputData = {}
+    var dataN = JSON.parse("{{name_list|escapejs}}");
+    var dataV = JSON.parse("{{value_list|escapejs}}");
+    const dataMarker = JSON.parse("{{marker_list|escapejs}}");
+    const alertPlaceholder = document.getElementById('liveAlertPlaceholder')
+
+    const alert = (message, type) => {
+      const wrapper = document.createElement('div');
+      const item_nameD = document.getElementById('myInput').value;
+      const quantity = document.getElementById('quantity').value;
+      const intValue = parseInt(document.getElementById('total').value);
+      const total=parseInt(quantity);
+      if (item_nameD in inputData){
+        nQ = inputData[item_nameD] + total;
+        inputData[item_nameD]=nQ;
+        document.getElementById('test').innerHTML = nQ;
+      }else{
+        inputData[item_nameD]=total;
+      }
+      //addData(item_nameD,quantity);
+      //inputData[item_nameD]=quantity;
+      const dataName = JSON.parse("{{name_list|escapejs}}");
+      const dataValue = JSON.parse("{{value_list|escapejs}}");
+      const dataMarker = JSON.parse("{{marker_list|escapejs}}");
+      const itemValue = dataValue[dataName.indexOf(item_nameD)];
+      QandN(inputData);
+      wrapper.innerHTML = [
+      `<div class="alert alert-${type} alert-dismissible rounded-5" role="alert">`,
+      `   <div>${message}</div>`,
+      `   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" onclick="reduce('${item_nameD}',${total})"></button>`,
+      '</div>'
+      ].join('')
+
+      alertPlaceholder.append(wrapper)
+    }
+
+    const alertTrigger = document.getElementById('liveAlertBtn')
+    if (alertTrigger) {
+      alertTrigger.addEventListener('click',() => {
+        //const name = document.getElementById('itemName').value;for testing
+        const dataName = JSON.parse("{{name_list|escapejs}}");
+        const dataValue = JSON.parse("{{value_list|escapejs}}");
+        const item_name = document.getElementById('myInput').value;
+        const quantity = document.getElementById('quantity').value;
+        const intValue = parseInt(document.getElementById('total').value);
+        const total=parseInt(quantity);
+        const itemValue = dataValue[dataName.indexOf(item_name)];
+        if (countries.includes(item_name)) {
+          alert(item_name+'-'+itemValue+'x'+quantity+'= '+(total*itemValue),'success');
+          document.getElementById('myInput').value = '';
+          document.getElementById('quantity').value = '';
+          document.getElementById('total').value = itemValue*total+intValue;
+          //document.getElementById('showUp').innerHTML = JSON.stringify(inputData);
+          deactived();
+        }else{
+          document.getElementById('myInput').value = '';
+          document.getElementById('quantity').value = '';
+          alert('no such items','success');
+          deactived();
+        }
+      })
+    }
+//for filterin value
+
+</script>
+<!--live alert end-->
+<!--script for button disabled or not-->
+<script type="text/javascript">
+  {
+    const dictN = JSON.parse("{{name_list|escapejs}}");
+    const dictV = JSON.parse("{{value_list|escapejs}}");
+    //const itemNamme = name_filter(dict_D);
+    const button = document.getElementById('liveAlertBtn');
+    const quantity = document.getElementById('quantity');
+    const item = document.getElementById('myInput');
+    deactived()
+    function deactived() {
+      button.disabled = true;
+    }
+    function actived() {
+      button.disabled = false;
+    }
+    function check() {
+      if (quantity.value != '' && (dictN.includes(item.value)) && quantity.checkValidity() && item.checkValidity()) {
+        actived();
+      }else{
+        deactived();
+      }
+    }
+    quantity.addEventListener('input',check);
+    item.addEventListener('input',check);
+  } 
+</script>
+<script type="text/javascript">
+
+  /*An array containing all the country names in the world:*/
+  var data = JSON.parse("{{name_list|escapejs}}");
+  var countries = data;
+  {% comment %} var countries = ['lemon','apple','say','ball']; {% endcomment %}
+  /*initiate the autocomplete function on the "myInput" element, and pass along the countries array as possible autocomplete values:*/
+  autocomplete(document.getElementById("myInput"), countries);
+</script>
+
+<!--script for button disabled or not-->
+<p id = 'test'></p>
+<p id = 'test1'></p>
+</body>
+</html>

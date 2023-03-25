@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Data Hunter</title>
+  {% load static %}
+  <!-- CSS only -->
+  <link rel="icon" type="image/png" href="{% static 'images/1x.png' %}"/>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- JavaScript Bundle with Popper -->
+  <script src = "{% static 'javaScripts/javascripts.js' %}"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8" crossorigin="anonymous"></script>
+  <style type="text/css">
+    .responsive {
+      height: auto;
+      width: 100%;
+    }
+    form {
+      background-position: center center;
+      background-repeat: no-repeat;
+    }
+    body {
+      background-color: none;
+    }
+  </style>
+</head>
+<body class="bg-opacity-25">
+  <div class="container mt-5" style="max-width: 500px;">
+    <h2 style="color: gray;text-align: center;">Store Manager</h2>
+    {% if not messages %}
+    <form class="shadow-lg rounded-5 p-4 fw-bold" action="register_user" method="post">
+      {% csrf_token %}
+      <!--first register-->
+          <label>မြို့</label>
+          <input type="text" class="form-control" name="city" placeholder="Example-Yangon" autocomplete="off" required>
+          <label>မြို့နယ်</label>
+          <input type="text" class="form-control" name="township" placeholder="Example-Tamwe" autocomplete="off" required>
+          <label>ရပ်ကွက်</label>
+          <input type="text" class="form-control" name="ward" placeholder="Example-Kyar Kwet Thit" autocomplete="off" required>
+          <label>လမ်း</label>
+          <input type="text" class="form-control" name="street" placeholder="Example-Kyawt Myawng Street" autocomplete="off" required>
+          <label>Email:</label>
+          <input type="email" class="form-control" id="email" placeholder="example@gmail.com" name="email_phone" autocomplete='off' required>        
+          <lable>ပေးလိုသောဆိုင်နာမည်</label>
+          <input type="text" class="form-control" id="userName" placeholder="Enter user name" name="user_name" autocomplete='off' required>
+          <label>လှူ့ဝှက်စာလုံး</label>
+          <input type="password" class="form-control" onmouseout="mouseOut()" onmouseover="mouseOver()" id="pwd" pattern="{8,}" placeholder="password အနည်းဆုံး၈လုံးနှင့်အထက်" name="pswd" required>
+          {% comment %} <ul id="pswdList" style="display:none;color:gray">
+            <li>at least one number</li>
+            <li>must contain lowercase and uppercase letter</li>
+            <li>at least one character</li>
+            <li>at least 8 letters or more</li>
+          </ul> {% endcomment %}
+          <label>လှူ့ဝှက်စာလုံး အတည်ပြုရန်:</label>
+          <input type="password" class="form-control" id="pwd" placeholder="Confirm password" name="conPass" required>
+        
+        <button type = "submit" class="btn btn-primary">Register</button>
+      <!--second confirmations-->
+    </form>
+    {% endif %}
+    {% if messages %}
+      {% for i in messages %}
+      <strong><p class="text-danger">{{i}}</p></strong>
+      {% endfor %}
+    <form class="shadow-lg rounded-5 p-4 fw-bold" action="register_user" method="post">
+      {% csrf_token %}
+      <!--first register-->
+        <label>မြို့</label>
+        <input type="text" class="form-control" name="city" placeholder="Example-Yangon" autocomplete="off" value={{city}} required>
+        <label>မြို့နယ်</label>
+        <input type="text" class="form-control" name="township" placeholder="Example-Tamwe" autocomplete="off" value={{township}} required>
+        <label>ရပ်ကွက်</label>
+        <input type="text" class="form-control" name="ward" placeholder="Example-Kyar Kwet Thit" autocomplete="off" value={{ward}} required>
+        <label>လမ်း</label>
+        <input type="text" class="form-control" name="street" placeholder="Example-Kyawt Myawng Street" value={{street}} autocomplete="off" required>
+        <label>Email</label>
+        <input type="email" class="form-control" id="email" placeholder="example@gmail.com" name="email_phone" value={{email}} autocomplete='off' required>        
+        <lable>ပေးလိုသောဆိုင်နာမည်</label>
+        <input type="text" class="form-control" id="userName" placeholder="Enter user name" name="user_name" value={{userName}} autocomplete='off' required>
+        <label>လှူ့ဝှက်စာလုံး</label>
+        <input type="password" class="form-control" onmouseout="mouseOut()" onmouseover="mouseOver()" id="pwd" pattern="{8,}" placeholder="password အနည်းဆုံး၈လုံးနှင့်အထက်" name="pswd" required>
+        <label>လှူ့ဝှက်စာလုံး အတည်ပြုရန်</label>
+        <input type="password" class="form-control" id="pwd" placeholder="Confirm password" name="conPass" required>
+      
+      <button type = "submit" class="btn btn-primary">Register</button>
+      <!--second confirmations-->
+    </form>
+    {% endif %}
+  </div>
+  <p id="test"></p>
+</body>
+</html>

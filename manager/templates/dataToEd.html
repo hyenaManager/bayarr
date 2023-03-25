@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Data</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- CSS only -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <!-- JavaScript Bundle with Popper -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8" crossorigin="anonymous"></script>
+<style>
+input {
+    padding-bottom:27px;
+}
+body {
+    font-family:Myanmar3,Yunghkio,'Masterpiece Uni Sans';
+  }
+
+</style>
+</head>
+<body>
+    <div class="container-fluid" style="margin-left:auto;margin-right:auto;margin-top:170px;margin-bottom:0px;max-width:700px;">
+        
+        <form action="dataEdit" method="post" class="shadow-lg rounded-4 p-5">
+            {% csrf_token %}
+            <strong class="">ပြောင်းလဲလိုသည့်နေရာများကိုပြောင်းလဲနိုင်ပါသည်</strong>
+            <div class="container-fluid pt-3">
+                <label style="font-family:fantasy;"><strong>ကုန်ပစ္စည်းအမည်</strong></label>
+                <input type="text" class="form-control" required name="item_name" id="name1">
+                {% comment %} <label style="font-family:fantasy;"><strong>အရေအတွက်</strong></label>
+                <input type="number" value={{quantity}} class="form-control" required name="quantity"> {% endcomment %}
+                <label style="font-family:fantasy;"><strong>တန်ဖိုး</strong></label>
+                <input type="number" value={{price}} class="form-control" required name="price">
+                <label style="font-family:fantasy;"><strong>ဈေးတင်နှုန်း</strong></label>
+                <input type="number" value={{post_price}} class="form-control" required name="post_price">
+                <input type="text" class="form-control" required name="item_name1" style="display:none;" id="name2">
+                <input type="number" value={{price}} class="form-control" required name="price1" style="display:none;">
+                <input type="number" value={{quantity}} class="form-control" required name="quantity1" style="display:none;">
+                <input type="number" value={{post_price}} class="form-control" required name="post_price1" style="display:none;">
+                <input type="number" value={{dataId}} class="form-control" required name="dataId" style="display:none;">  
+            </div>
+            <button type="button" class="btn btn-primary mt-3 p-3" style="float:left;"><a href="data" style="text-decoration:none;color:white;">မလုပ်တော့ပါ</a></button>
+            <button type="submit" class="btn btn-success mt-3 p-3" style="float:right;">ပြောင်းလဲမည်</button>
+        </form>
+    </div>
+    <script>
+        var dataToEd = JSON.parse("{{dataToE|escapejs}}");
+        document.getElementById('name1').value = dataToEd[0]
+        document.getElementById('name2').value = dataToEd[0]
+    </script>
+</body>
+</html>

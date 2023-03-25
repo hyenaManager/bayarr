@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Data</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- CSS only -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <!-- JavaScript Bundle with Popper -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8" crossorigin="anonymous"></script>
+<style>
+input {
+    padding-bottom:27px;
+}
+body {
+    font-family:Myanmar3,Yunghkio,'Masterpiece Uni Sans';
+  }
+
+</style>
+</head>
+<body>
+    <div class="container-fluid" style="margin-left:auto;margin-right:auto;margin-top:170px;margin-bottom:0px;max-width:700px;">
+        
+        <form action="dataDel" method="post" class="shadow-lg rounded-4 p-5">
+            {% csrf_token %}
+            <input type="number" name="idNum" value={{id}} style="display:none;">
+            <div class="container-fluid">
+                <h5>ဖျက်သိမ်းရန်သေချာပါသလား</h5> 
+            </div>
+            <button type="button" class="btn btn-primary mt-3 p-3" style="float:left;"><a href="data" style="text-decoration:none;color:white;">မလုပ်တော့ပါ</a></button>
+            <button type="submit" class="btn btn-danger mt-3 p-3" style="float:right;">ဖျက်သိမ်းမည်</button>
+        </form>
+    </div>
+    <script>
+        var dataToEd = JSON.parse("{{dataToE|escapejs}}");
+        {% comment %} document.getElementById('name1').value = dataToEd[0] {% endcomment %}
+        document.getElementById('name2').value = dataToEd[0]
+    </script>
+</body>
+</html>
