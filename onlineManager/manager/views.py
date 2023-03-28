@@ -736,7 +736,14 @@ def csv_data(request):
     return response
 
 def devContact(request):
-    return render(request,'developerContact.html')
+    id = request.user.id
+    data = mainData.objects.values()
+    item_names = []
+    for i in data:
+        if data.id_serializer(id) is not None:
+            item_names.append(data.id_serializer(id))
+
+    return render(request,'developerContact.html',{'itemNames':item_names})
 
 def del_op(request,id):
     return render(request,'delOption.html',{'id':id})

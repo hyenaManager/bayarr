@@ -8,6 +8,13 @@ class mainData(models.Model):
     quantity = models.IntegerField(default=0,null=True)
     post_price = models.IntegerField(default=0,null=True)
 
+    def __str__(self) -> str:
+        return self.item_name
+    
+    def id_serializer(self,id):
+        if self.userID == id:
+            return self.item_name
+
 class historyData(models.Model):
     userID1 = models.IntegerField(default=0,null=True)
     O_price = models.BigIntegerField(default=0,null=True)
