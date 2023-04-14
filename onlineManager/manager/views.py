@@ -281,8 +281,6 @@ def data(request):
     #         'id':idL[i]
     #     }
     #     lastData.append(exDict)
-    # print('-------> this is last Data')
-    # print(lastData)
     return render(request,'Data.html',{
             'dataList':s_data,
             'storeName':request.user.username,
